@@ -4,23 +4,21 @@ mod history;
 use history::history::History;
 
 fn main() {
-    let mut history = History::default();
+    let mut history = History::new();
 
-    //println!("{:?}", history);
-
-    history.insert_new();
-
-    //println!("{:?}", history);
+    println!("{:?}", history);
 
     history.insert_new();
 
-    //println!("{:?}", history);
+    println!("{:?}", history);
 
     history.insert_new();
 
-    //println!("{:?}", history);
+    println!("{:?}", history);
+
+    history.insert_new();
+
+    println!("{:?}", history);
 
     history.print();
-
-    history.query(String::from("ll"));
 }
