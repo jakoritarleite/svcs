@@ -1,24 +1,11 @@
 mod hash;
 mod history;
+mod cli;
 
-use history::history::History;
+// use history::history::History;
 
 fn main() {
-    let mut history = History::new();
+    let matches = cli::commands().get_matches();
 
-    println!("{:?}", history);
-
-    history.insert_new();
-
-    println!("{:?}", history);
-
-    history.insert_new();
-
-    println!("{:?}", history);
-
-    history.insert_new();
-
-    println!("{:?}", history);
-
-    history.print();
+    return cli::command_match(&matches);
 }
