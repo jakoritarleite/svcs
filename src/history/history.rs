@@ -6,12 +6,6 @@ pub struct History {
     pub nodes: Vec<Node>
 }
 
-impl Default for History {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 impl History {
     pub fn new() -> Self {
         Self {
@@ -48,5 +42,51 @@ impl History {
             print!("--");
         }
         println!();
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::cell::RefCell;
+
+    use super::History;
+
+    #[test]
+    fn should_create_empty_history() {
+        let history = History::new();
+    
+        assert_eq!(history.lenght, 0);
+        assert_eq!(history.nodes.is_empty(), true);
+    }
+
+    #[test]
+    fn should_append_root_node_to_history() {
+        let mut history = History::new();
+
+        history.insert_new();
+
+        assert_eq!(history.lenght, 1);
+        assert_eq!(history.nodes.is_empty(), false);
+    }
+
+    #[test]
+    fn should_append_node_to_history_and_link() {
+        let mut history = History::new();
+
+        history.insert_new();
+    
+        assert_eq!(history.lenght, 1);
+        assert_eq!(history.nodes.is_empty(), false);
+    
+        history.insert_new();
+
+        assert_eq!(history.lenght, 2);
+
+        // Verify if nodes are correctly linked
+        assert_eq!(history.nodes[0].prev, None);
+        assert_eq!(history.nodes[0].next, RefCell::new(Some(history.nodes[1].id.clone())));
+
+        assert_eq!(history.nodes[1].prev, Some(history.nodes[0].id.clone()));
+        assert_eq!(history.nodes[1].next, RefCell::new(None));
     }
 }
