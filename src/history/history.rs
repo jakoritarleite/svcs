@@ -29,8 +29,8 @@ impl History {
         self.lenght = self.nodes.len();
     }
 
-    pub fn query(&self, id: String) {
-        todo!("history query");
+    pub fn query(&self, id: String) -> Option<&Node> {      
+        self.nodes.iter().find(|node| node.id.clone() == id)
     }
 
     pub fn print(&self) {
@@ -88,5 +88,26 @@ mod tests {
 
         assert_eq!(history.nodes[1].prev, Some(history.nodes[0].id.clone()));
         assert_eq!(history.nodes[1].next, RefCell::new(None));
+    }
+
+    #[test]
+    fn should_query_nodes() {
+        let mut history = History::new();
+
+        history.insert_new();
+        history.insert_new();
+        history.insert_new();
+        history.insert_new();
+    
+        let first_query = history.query(history.nodes[1].id.clone());
+
+        assert_eq!(first_query.is_some(), true);
+        assert_eq!(first_query.unwrap().id, history.nodes[1].id);
+
+        let second_query = history.query(history.nodes[3].id.clone());
+
+        assert_eq!(second_query.is_some(), true);
+        assert_eq!(second_query.unwrap().id, history.nodes[3].id);
+
     }
 }
