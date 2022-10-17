@@ -1,10 +1,13 @@
-use std::cell::RefCell;
+use std::{cell::RefCell, process};
+use std::fs::File;
+use std::io::prelude::*;
+use serde::{Serialize, Deserialize};
 
 use crate::hash::create_hash;
 
 // Node is a point in the change history
 // always points to the previous node and to the next.
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Node {
     pub id: String,
     pub prev: Option<String>,
@@ -13,11 +16,23 @@ pub struct Node {
 
 impl Node {
     pub fn new(prev_id: Option<String>, next_id: Option<String>) -> Self {
-        Self {
+        let node = Self {
             id: create_hash(),
             prev: prev_id,
             next: RefCell::new(next_id),
-        }
+        };
+
+        let serialized_node: String = serde_json::to_string(&node).unwrap();
+
+        match File::create(format!(".svcs/nodes/{}", node.id.clone())) {
+            Ok(mut file) => file.write_all(serialized_node.as_bytes()).unwrap(),
+            Err(error) => {
+                eprintln!("Could not create new node due to error: {:?}", error);
+                process::exit(1);
+            }
+        };
+
+        node
     }
 }
 

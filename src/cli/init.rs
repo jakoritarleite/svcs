@@ -1,5 +1,7 @@
 use std::{fs, io::ErrorKind};
 
+use crate::config::{node::NodeConfig, HistoryConfig};
+
 pub fn init() {
     let current_directory = match std::env::current_dir() {
         Ok(cwd) => cwd,
@@ -22,4 +24,7 @@ pub fn init() {
             },
         },
     };
+
+    NodeConfig::create();
+    HistoryConfig::create();
 }
